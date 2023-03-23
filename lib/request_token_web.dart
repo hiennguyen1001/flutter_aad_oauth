@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:random_string/random_string.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -22,24 +23,30 @@ class RequestTokenWeb {
 
   Future<Token> requestToken() async {
     late Token token;
-    final String urlParams = _constructUrlParams();
+    String urlParams = _constructUrlParams();
+    final state = randomAlpha(16);
     if (_config.context != null) {
+      urlParams += '&state=$state' ;
       String initialURL = ('${_authorizationRequest.url}?$urlParams').replaceAll(' ', '%20');
-
       _webAuth(initialURL);
     } else {
       throw Exception('Context is null. Please call setContext(context).');
     }
 
     var jsonToken = await _onCode.first;
+    if (jsonToken['state'] != state) {
+      throw Exception('state field in response is not same in auth url param');
+    }
     token = Token.fromJson(jsonToken);
     return token;
   }
 
   _webAuth(String initialURL) {
     html.window.onMessage.listen((event) {
-      var tokenParm = 'access_token';
-      if (event.data.toString().contains(tokenParm)) {
+      var tokenParam = 'access_token';
+      var stateParam = 'state';
+      final urlData = event.data.toString();
+      if (urlData.contains(tokenParam) && urlData.contains(stateParam)) {
         _getUrlData(event.data.toString());
       }
       if (event.data.toString().contains('error')) {

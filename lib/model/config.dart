@@ -13,6 +13,7 @@ class Config {
   String? authorizationUrl;
   String? tokenUrl;
   final String nonce;
+  final String prompt;
 
   ///ResponseType to mobile usually is "code", and web usually is "id_token+token"
   Config({
@@ -26,6 +27,7 @@ class Config {
     this.contentType = 'application/x-www-form-urlencoded',
     this.context,
     this.nonce = 'nonce_value',
+    this.prompt = 'select_account',
     this.authorizationUrl,
     this.tokenUrl,
   }) {

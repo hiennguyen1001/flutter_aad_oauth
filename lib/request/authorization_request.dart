@@ -19,7 +19,8 @@ class AuthorizationRequest {
       'client_id': config.clientId,
       'response_type': config.responseType,
       'redirect_uri': config.redirectUri,
-      'scope': config.scope
+      'scope': config.scope,
+      'prompt': config.prompt
     };
     if (kIsWeb) {
       parameters.addAll({'nonce': config.nonce});
