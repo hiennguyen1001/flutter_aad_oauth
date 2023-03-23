@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 
 import 'package:flutter/widgets.dart';
 import 'package:random_string/random_string.dart';
@@ -14,6 +15,7 @@ class RequestTokenWeb {
   final Config _config;
   late AuthorizationRequest _authorizationRequest;
   html.WindowBase? _popupWin;
+  StreamSubscription<MessageEvent>? onMessageSubs;
 
   Stream<Map<String, String>>? _onCodeStream;
 
@@ -42,7 +44,7 @@ class RequestTokenWeb {
   }
 
   _webAuth(String initialURL) {
-    html.window.onMessage.listen((event) {
+    onMessageSubs = html.window.onMessage.listen((event) {
       var tokenParam = 'access_token';
       var stateParam = 'state';
       final urlData = event.data.toString();
@@ -68,8 +70,8 @@ class RequestTokenWeb {
 
     var token = uri.queryParameters;
     _onCodeListener.add(token);
-
     _closeWebWindow();
+    onMessageSubs?.cancel();
   }
 
   _closeWebWindow() {
