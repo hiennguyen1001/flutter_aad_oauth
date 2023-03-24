@@ -16,6 +16,7 @@ class RequestTokenWeb {
   late AuthorizationRequest _authorizationRequest;
   html.WindowBase? _popupWin;
   StreamSubscription<MessageEvent>? onMessageSubs;
+  String? lastStateRequest;
 
   Stream<Map<String, String>>? _onCodeStream;
 
@@ -26,9 +27,9 @@ class RequestTokenWeb {
   Future<Token> requestToken() async {
     late Token token;
     String urlParams = _constructUrlParams();
-    final state = randomAlpha(16);
+    lastStateRequest = randomAlpha(8);
     if (_config.context != null) {
-      urlParams += '&state=$state' ;
+      urlParams += '&state=$lastStateRequest' ;
       String initialURL = ('${_authorizationRequest.url}?$urlParams').replaceAll(' ', '%20');
       _webAuth(initialURL);
     } else {
@@ -36,7 +37,8 @@ class RequestTokenWeb {
     }
 
     var jsonToken = await _onCode.first;
-    if (jsonToken['state'] != state) {
+
+    if (lastStateRequest != null && jsonToken.containsKey('state') && jsonToken['state'] != lastStateRequest) {
       throw Exception('state field in response is not same in auth url param');
     }
     token = Token.fromJson(jsonToken);
