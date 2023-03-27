@@ -55,7 +55,7 @@ class RequestTokenWeb {
       }
       if (event.data.toString().contains('error')) {
         _closeWebWindow();
-        throw Exception('Access denied or authentication canceled.');
+        throw Exception('Access denied or authentication canceled. Url error: ${event.data}');
       }
     });
     _popupWin = html.window.open(initialURL, 'Microsoft Auth', 'width=800, height=900, scrollbars=yes');
