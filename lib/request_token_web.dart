@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'dart:html';
 
 import 'package:flutter/widgets.dart';
 import 'package:random_string/random_string.dart';
-import 'package:universal_html/html.dart' as html;
+import 'package:universal_html/html.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'model/config.dart';
@@ -15,7 +14,7 @@ class RequestTokenWeb {
       StreamController();
   final Config _config;
   late AuthorizationRequest _authorizationRequest;
-  html.WindowBase? _popupWin;
+  WindowBase? _popupWin;
   StreamSubscription<MessageEvent>? onMessageSubs;
   String? lastStateRequest;
 
@@ -50,7 +49,7 @@ class RequestTokenWeb {
   }
 
   _webAuth(String initialURL) {
-    onMessageSubs = html.window.onMessage.listen((event) {
+    onMessageSubs = window.onMessage.listen((event) {
       var tokenParam = 'access_token';
       var stateParam = 'state';
       final urlData = event.data.toString();
@@ -64,7 +63,7 @@ class RequestTokenWeb {
             'Access denied or authentication canceled. Url error: ${event.data}');
       }
     });
-    _popupWin = html.window.open(
+    _popupWin = window.open(
         initialURL, 'Microsoft Auth', 'width=800, height=900, scrollbars=yes');
   }
 

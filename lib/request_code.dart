@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart' show MaterialPageRoute, Navigator, SafeArea;
 import 'package:flutter/widgets.dart';
@@ -34,12 +35,13 @@ class RequestCode {
   }
 
   _mobileAuth(String initialURL) async {
-    // if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView(); // webview_flutter: ^3.0.0 BREAKING CHANGE Not necessary
+    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView(); // webview_flutter: ^3.0.0 BREAKING CHANGE Not necessary
 
     var webView = WebView(
       initialUrl: initialURL,
       javascriptMode: JavascriptMode.unrestricted,
       onPageFinished: (url) => _getUrlData(url),
+      // navigationDelegate: _onNavigationRequest,
     );
 
     await Navigator.of(_config.context!)
@@ -61,6 +63,27 @@ class RequestCode {
       Navigator.of(_config.context!).pop();
     }
   }
+
+  Future<NavigationDecision> _onNavigationRequest(
+      NavigationRequest request) async {
+    try {
+      var uri = Uri.parse(request.url);
+
+      if (uri.queryParameters['error'] != null) {
+        Navigator.of(_config.context!).pop();
+      }
+
+      var checkHost = uri.host == Uri.parse(_authorizationRequest.redirectUrl!).host;
+
+      if (uri.queryParameters['code'] != null && checkHost) {
+        var _code = uri.queryParameters['code'];
+        _onCodeListener.add(_code);
+        Navigator.of(_config.context!).pop();
+      }
+    } catch (_) {}
+    return NavigationDecision.navigate;
+  }
+
 
   Future<void> clearCookies() async {
     await CookieManager().clearCookies();

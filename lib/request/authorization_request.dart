@@ -22,9 +22,7 @@ class AuthorizationRequest {
       'scope': config.scope,
       'prompt': config.prompt
     };
-    if (kIsWeb) {
-      parameters.addAll({'nonce': config.nonce});
-    }
+    parameters.addAll({'nonce': config.nonce});
     this.fullScreen = fullScreen;
     this.clearCookies = clearCookies;
   }
