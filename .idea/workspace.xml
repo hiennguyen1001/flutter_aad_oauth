@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="33d14703-fb0c-4d09-b384-5e0b0bfdea7f" name="Default Changelist" comment="">
+    <list default="true" id="33d14703-fb0c-4d09-b384-5e0b0bfdea7f" name="Default Changelist" comment="upgrade packages">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/example/.flutter-plugins-dependencies" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/request/authorization_request.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/request/authorization_request.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/request_code.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/request_code.dart" afterDir="false" />
@@ -101,6 +99,15 @@
       <option name="presentableId" value="Default" />
       <updated>1647101517648</updated>
     </task>
+    <task id="LOCAL-00001" summary="upgrade packages">
+      <option name="closed" value="true" />
+      <created>1735722525005</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1735722525005</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -119,5 +126,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="upgrade packages" />
+    <option name="LAST_COMMIT_MESSAGE" value="upgrade packages" />
   </component>
 </project>

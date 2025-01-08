@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 
-import 'package:flutter/material.dart' show MaterialPageRoute, Navigator, SafeArea;
+import 'package:flutter/material.dart' show Colors, MaterialPageRoute, Navigator, SafeArea;
 import 'package:flutter/widgets.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -35,14 +34,16 @@ class RequestCode {
   }
 
   _mobileAuth(String initialURL) async {
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView(); // webview_flutter: ^3.0.0 BREAKING CHANGE Not necessary
+    final launchUri = Uri.parse(initialURL);
+    final controller = WebViewController();
+    await controller.setNavigationDelegate(NavigationDelegate(
+      onPageFinished: _getUrlData,
+    ));
+    await controller.setJavaScriptMode(JavaScriptMode.unrestricted);
+    await controller.setBackgroundColor(Colors.transparent);
+    await controller.loadRequest(launchUri);
 
-    var webView = WebView(
-      initialUrl: initialURL,
-      javascriptMode: JavascriptMode.unrestricted,
-      onPageFinished: (url) => _getUrlData(url),
-      // navigationDelegate: _onNavigationRequest,
-    );
+    final webView = WebViewWidget(controller: controller);
 
     await Navigator.of(_config.context!)
         .push(MaterialPageRoute(builder: (context) => SafeArea(child: webView)));
@@ -64,29 +65,8 @@ class RequestCode {
     }
   }
 
-  Future<NavigationDecision> _onNavigationRequest(
-      NavigationRequest request) async {
-    try {
-      var uri = Uri.parse(request.url);
-
-      if (uri.queryParameters['error'] != null) {
-        Navigator.of(_config.context!).pop();
-      }
-
-      var checkHost = uri.host == Uri.parse(_authorizationRequest.redirectUrl!).host;
-
-      if (uri.queryParameters['code'] != null && checkHost) {
-        var _code = uri.queryParameters['code'];
-        _onCodeListener.add(_code);
-        Navigator.of(_config.context!).pop();
-      }
-    } catch (_) {}
-    return NavigationDecision.navigate;
-  }
-
-
   Future<void> clearCookies() async {
-    await CookieManager().clearCookies();
+    await WebViewCookieManager().clearCookies();
   }
 
   Stream<String?> get _onCode => _onCodeStream ??= _onCodeListener.stream.asBroadcastStream();

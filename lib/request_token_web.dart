@@ -91,7 +91,7 @@ class RequestTokenWeb {
   }
 
   Future<void> clearCookies() async {
-    await CookieManager().clearCookies();
+    await WebViewCookieManager().clearCookies();
   }
 
   Stream<Map<String, String>> get _onCode =>
